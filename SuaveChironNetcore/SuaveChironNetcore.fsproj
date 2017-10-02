@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="HNProvider.fs" />
+    <Compile Include="WebApi.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Aether">
+      <Version>8.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="FParsec">
+      <Version>1.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="Chiron">
+      <Version>6.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="Suave">
+      <Version>2.2.1</Version>
+    </PackageReference>
+  </ItemGroup>
+</Project>

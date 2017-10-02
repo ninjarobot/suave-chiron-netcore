@@ -7,7 +7,7 @@
         {
             "taskName": "build",
             "args": [
-                "${workspaceRoot}/SuaveChironNetcore/project.json"
+                "${workspaceRoot}/SuaveChironNetcore/SuaveChironNetcore.fsproj"
             ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"
