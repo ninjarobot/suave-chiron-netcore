@@ -1,5 +1,6 @@
 namespace SuaveChironNetcore
 
+open Chiron.Builder
 open Chiron.Mapping
 open Chiron.Operators
 open Chiron.Parsing
@@ -13,6 +14,9 @@ module HNProvider =
     let private fromUnixTime time = 
         System.DateTimeOffset.FromUnixTimeSeconds(time).UtcDateTime
 
+    let private toUnixTime time =
+        System.DateTimeOffset(time).ToUnixTimeSeconds ()
+
     type Metadata = {
         Deleted : bool option
         Dead : bool option
@@ -21,7 +25,17 @@ module HNProvider =
         Kids : int array option
         Time : System.DateTime // Creation date of the item, in Unix Time.
     }
-
+    with
+        static member ToJson (m:Metadata) =
+            json {
+                do! Json.write "id" m.Id
+                do! Json.writeUnlessDefault "dead" None m.Dead
+                do! Json.write "by" m.By
+                do! Json.writeUnlessDefault "kids" None m.Kids
+                do! Json.write "time" (m.Time |> toUnixTime)
+                do! Json.writeUnlessDefault "deleted" None m.Deleted
+            }
+        
     type CommentCount = int
     type ParentID = int
     type Score = int
@@ -39,6 +53,18 @@ module HNProvider =
         | PollOpt of Metadata * ParentID * Text * Votes
 
     with
+        static member ToJson (h:HackerNewsItem) =
+            match h with
+            | Job (metadata, title) ->
+                json {
+                    do! Metadata.ToJson (metadata)
+                    do! Json.write "type" "job"
+                    do! Json.write "title" title
+                }
+            | Story(_, _, _, _, _, _) -> failwith "Not Implemented"
+            | Comment(_, _, _) -> failwith "Not Implemented"
+            | Poll(_, _, _, _, _) -> failwith "Not Implemented"
+            | PollOpt(_, _, _, _) -> failwith "Not Implemented"            
 
         static member FromJson (_:HackerNewsItem) =
                 fun id deleted typ by time text dead parent kids url score title parts descendants ->

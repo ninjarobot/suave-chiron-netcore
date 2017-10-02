@@ -6,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/SuaveChironNetcore/bin/Debug/netcoreapp1.1/SuaveChironNetcore.dll",
+            "program": "${workspaceRoot}/SuaveChironNetcore/bin/Debug/netcoreapp2.0/SuaveChironNetcore.dll",
             "args": [],
             "cwd": "${workspaceRoot}",
             "externalConsole": false,

@@ -1,7 +1,8 @@
 namespace SuaveChironNetcoreTests
 
-open Chiron.Parsing
+open Chiron.Formatting
 open Chiron.Mapping
+open Chiron.Parsing
 open Xunit
 open SuaveChironNetcore.HNProvider
 
@@ -99,3 +100,19 @@ module HNProviderTests =
             match newsItem with
             | PollOpt(metadata, parentId, text, votes) -> Assert.Equal("Yes, ban them; I'm tired of seeing Valleywag stories on News.YC.", text)
             | _ -> failwith "News item should be PollOpt type."
+
+        [<Fact>]
+        member x.WriteSampleJob () =
+            let metadata =
+                {
+                    Deleted = None
+                    Dead = None
+                    By = "justin"
+                    Id = 100
+                    Kids = [|101 ; 102|] |> Some
+                    Time = System.DateTime(2017, 10, 25, 16, 04, 35)
+                }
+            let job = Job(metadata, "SomeJob")
+            let json = job |> Json.serialize |> Json.format
+            Assert.Equal ("""{"by":"justin","id":100,"kids":[101,102],"time":1508961875,"title":"SomeJob","type":"job"}""", json)
+            
