@@ -7,6 +7,7 @@
   </PropertyGroup>
     <ItemGroup>
     <Compile Include="HNProviderTests.fs" />
+    <Compile Include="WebApiTests.fs" />
   </ItemGroup>
 
   <ItemGroup>

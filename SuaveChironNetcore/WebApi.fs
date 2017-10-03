@@ -16,11 +16,11 @@ module WebApi =
             return! OK (sprintf "%A" news) ctx 
         }
 
-    let newsItemHandler (id:int) =
+    let newsItemHandler (getNewsItem:int -> Async<HackerNewsItem>) (id:int) =
         fun (ctx:HttpContext) -> async {
-            let! item = newsItem id
-            let title = sprintf "%A" item
-            return! OK title ctx
+            let! item = id |> getNewsItem
+            let json = item |> Chiron.Mapping.Json.serialize |> Chiron.Formatting.Json.format
+            return! OK json ctx
         }
 
     let startServer () =
@@ -29,7 +29,7 @@ module WebApi =
                 [ GET >=> choose 
                     [
                         path "/topstories" >=> topStoriesHandler >=> setMimeType "application/json; charset=utf-8"
-                        pathScan "/story/%i" newsItemHandler >=> setMimeType "application/json; charset=utf-8"
+                        pathScan "/story/%i" (newsItemHandler newsItem) >=> setMimeType "application/json; charset=utf-8"
                         path "/favicon.ico" >=> ok [||] >=> setMimeType "image/x-icon" // QUIT IT FAVICON!!!
                     ]
                 ]
